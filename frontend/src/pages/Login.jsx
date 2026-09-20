@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -43,53 +44,80 @@ function Login() {
   };
 
   return (
-    <div>
-      <h1>Digital Heroes</h1>
-      <h2>Login</h2>
+    <div className="login-page">
+      <div className="login-left">
+        <div className="brand-section">
+          <div className="brand-icon">🏌️</div>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+          <h1>Digital Heroes</h1>
 
-        <br />
-        <br />
+          <p>
+            Play Better. Give Back. <br />
+            Be a Digital Hero.
+          </p>
+        </div>
+      </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+      <div className="login-right">
+        <div className="login-card">
+          <div className="login-header">
+            <h2>Welcome Back</h2>
+            <p>Login to your Digital Heroes account</p>
+          </div>
 
-        <br />
-        <br />
+          <form onSubmit={handleSubmit}>
+            <div className="input-group">
+              <label>Email Address</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+            <div className="input-group">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-      {message && <p>{message}</p>}
+            {message && (
+              <div className="login-error">
+                {message}
+              </div>
+            )}
 
-      <br />
+            <button
+              className="login-button"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
 
-      <p>
-        New user?{" "}
-        <button
-          type="button"
-          onClick={() => navigate("/register")}
-        >
-          Create Account
-        </button>
-      </p>
+          <div className="register-section">
+            <span>New to Digital Heroes?</span>
+
+            <button
+              type="button"
+              className="register-button"
+              onClick={() => navigate("/register")}
+            >
+              Create Account
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
