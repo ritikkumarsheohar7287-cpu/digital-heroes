@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import "./Register.css";
 
 function Register() {
   const navigate = useNavigate();
@@ -22,7 +23,6 @@ function Register() {
     const getCharities = async () => {
       try {
         const response = await api.get("/charities");
-
         setCharities(response.data.data);
       } catch (error) {
         console.error(error);
@@ -47,19 +47,15 @@ function Register() {
       setLoading(true);
       setMessage("");
 
-      const response = await api.post(
-        "/auth/register",
-        {
-          ...formData,
-          charityPercentage: Number(
-            formData.charityPercentage
-          ),
-        }
-      );
+      const response = await api.post("/auth/register", {
+        ...formData,
+        charityPercentage: Number(
+          formData.charityPercentage
+        ),
+      });
 
       setMessage(
-        response.data.message ||
-          "Registration successful"
+        response.data.message || "Registration successful"
       );
 
       setTimeout(() => {
@@ -78,116 +74,158 @@ function Register() {
   };
 
   return (
-    <div>
-      <h1>Digital Heroes</h1>
+    <div className="register-page">
+      <div className="register-left">
+        <div className="register-brand">
+          <div className="register-icon">🏌️</div>
 
-      <h2>Create Account</h2>
+          <h1>Digital Heroes</h1>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="fullName"
-          placeholder="Full Name"
-          value={formData.fullName}
-          onChange={handleChange}
-          required
-        />
+          <p>
+            Play Better. Give Back.
+            <br />
+            Be a Digital Hero.
+          </p>
 
-        <br />
-        <br />
+          <div className="register-benefits">
+            <div>✓ Create your Digital Heroes account</div>
+            <div>✓ Choose a charity you care about</div>
+            <div>✓ Make a positive impact</div>
+          </div>
+        </div>
+      </div>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+      <div className="register-right">
+        <div className="register-card">
+          <div className="register-header">
+            <h2>Create Account</h2>
 
-        <br />
-        <br />
+            <p>
+              Join Digital Heroes and start making an impact
+            </p>
+          </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          minLength="6"
-          required
-        />
+          <form onSubmit={handleSubmit}>
+            <div className="register-input-group">
+              <label>Full Name</label>
 
-        <br />
-        <br />
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Enter your full name"
+                value={formData.fullName}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <label>
-          Choose Charity
-        </label>
+            <div className="register-input-group">
+              <label>Email Address</label>
 
-        <br />
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <select
-          name="charityId"
-          value={formData.charityId}
-          onChange={handleChange}
-          required
-        >
-          <option value="">
-            Select a charity
-          </option>
+            <div className="register-input-group">
+              <label>Password</label>
 
-          {charities.map((charity) => (
-            <option
-              key={charity.id}
-              value={charity.id}
+              <input
+                type="password"
+                name="password"
+                placeholder="Create a password"
+                value={formData.password}
+                onChange={handleChange}
+                minLength="6"
+                required
+              />
+
+              <small>Password must be at least 6 characters</small>
+            </div>
+
+            <div className="register-input-group">
+              <label>Choose Charity</label>
+
+              <select
+                name="charityId"
+                value={formData.charityId}
+                onChange={handleChange}
+                required
+              >
+                <option value="">
+                  Select a charity
+                </option>
+
+                {charities.map((charity) => (
+                  <option
+                    key={charity.id}
+                    value={charity.id}
+                  >
+                    {charity.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="register-input-group">
+              <label>Charity Contribution (%)</label>
+
+              <input
+                type="number"
+                name="charityPercentage"
+                min="10"
+                max="100"
+                value={formData.charityPercentage}
+                onChange={handleChange}
+                required
+              />
+
+              <small>
+                Choose how much of your contribution goes to
+                charity.
+              </small>
+            </div>
+
+            {message && (
+              <div
+                className={
+                  message.toLowerCase().includes("success")
+                    ? "register-success"
+                    : "register-error"
+                }
+              >
+                {message}
+              </div>
+            )}
+
+            <button
+              className="register-submit"
+              type="submit"
+              disabled={loading}
             >
-              {charity.name}
-            </option>
-          ))}
-        </select>
+              {loading
+                ? "Creating Account..."
+                : "Create Account"}
+            </button>
+          </form>
 
-        <br />
-        <br />
+          <div className="login-section">
+            <span>Already have an account?</span>
 
-        <label>
-          Charity Contribution (%)
-        </label>
-
-        <br />
-
-        <input
-          type="number"
-          name="charityPercentage"
-          min="10"
-          max="100"
-          value={formData.charityPercentage}
-          onChange={handleChange}
-          required
-        />
-
-        <br />
-        <br />
-
-        <button
-          type="submit"
-          disabled={loading}
-        >
-          {loading
-            ? "Creating Account..."
-            : "Create Account"}
-        </button>
-      </form>
-
-      {message && <p>{message}</p>}
-
-      <br />
-
-      <button
-        onClick={() => navigate("/login")}
-      >
-        Already have an account? Login
-      </button>
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
