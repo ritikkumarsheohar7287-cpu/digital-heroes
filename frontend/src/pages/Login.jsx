@@ -57,7 +57,8 @@ function Login() {
           required
         />
 
-        <br /><br />
+        <br />
+        <br />
 
         <input
           type="password"
@@ -68,7 +69,8 @@ function Login() {
           required
         />
 
-        <br /><br />
+        <br />
+        <br />
 
         <button type="submit" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
@@ -76,6 +78,18 @@ function Login() {
       </form>
 
       {message && <p>{message}</p>}
+
+      <br />
+
+      <p>
+        New user?{" "}
+        <button
+          type="button"
+          onClick={() => navigate("/register")}
+        >
+          Create Account
+        </button>
+      </p>
     </div>
   );
 }
